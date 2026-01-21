@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "784459665443",
+    "project_id": "evently-youssef-ashraf",
+    "storage_bucket": "evently-youssef-ashraf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:784459665443:android:bb5197fdcf8cc7cc1d6196",
+        "android_client_info": {
+          "package_name": "com.example.islami"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiBwRzwEV3OI6plVe3PYRjL94Lg31is1w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
