@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:islami/firebase_options.dart';
+import 'package:islami/screens/sura_Details/sura_Detail_Screen.dart';
 import 'introduction_screen.dart';
 import 'screens/Home/Home_Screen.dart';
 void main() async{
@@ -21,7 +22,8 @@ class MyApp extends StatelessWidget {
     initialRoute: IntroScreen.routeName,
     routes: {
       IntroScreen.routeName:(context)=>IntroScreen(),
-      HomeScreen.routeName:(context)=>HomeScreen()
+      HomeScreen.routeName:(context)=>HomeScreen(),
+      SuraDetailScreen.routeName:(context)=>SuraDetailScreen()
     },
 
   );

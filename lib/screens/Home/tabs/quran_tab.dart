@@ -5,6 +5,7 @@ import 'package:islami/core/styles.dart';
 import 'package:islami/models/sura_model.dart';
 import 'package:islami/screens/Home/widgets/recently_item.dart';
 import 'package:islami/screens/Home/widgets/sura_item.dart';
+import 'package:islami/screens/sura_Details/sura_Detail_Screen.dart';
 
 class Quran extends StatelessWidget {
    Quran({super.key});
@@ -444,10 +445,22 @@ class Quran extends StatelessWidget {
                   ),
                   itemCount: arabicAuranSuras.length,
                   itemBuilder:(context,index){
-                return SuraItem(model: SuraModel(name:  arabicAuranSuras[index],
-                    nameEN: englishQuranSuras[index],
-                    versesCount: AyaNumber[index],
-                    suraIndex: index+1),);
+                return InkWell(
+                  onTap: (){
+
+                    Navigator.pushNamed(context, SuraDetailScreen.routeName,
+                      arguments: SuraModel(name:  arabicAuranSuras[index],
+                          nameEN: englishQuranSuras[index],
+                          versesCount: AyaNumber[index],
+                          suraIndex: index+1)
+
+                    );
+                  },
+                  child: SuraItem(model: SuraModel(name:  arabicAuranSuras[index],
+                      nameEN: englishQuranSuras[index],
+                      versesCount: AyaNumber[index],
+                      suraIndex: index+1),),
+                );
               }),
             )
           ],),
