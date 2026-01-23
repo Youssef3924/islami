@@ -6,7 +6,8 @@ import 'package:islami/screens/sura_Details/sura_Detail_Screen.dart';
 import 'introduction_screen.dart';
 import 'screens/Home/Home_Screen.dart';
 void main() async{
-  CacheHelper.init();
+  WidgetsFlutterBinding.ensureInitialized();
+  await CacheHelper.init();
   runApp(const MyApp());
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
