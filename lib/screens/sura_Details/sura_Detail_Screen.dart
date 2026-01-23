@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:islami/core/colors.dart';
 import 'package:islami/core/styles.dart';
 import 'package:islami/models/sura_model.dart';
 
-class SuraDetailScreen extends StatelessWidget {
+class SuraDetailScreen extends StatefulWidget {
   static const String routeName="SuraDetailsScreen";
-  const SuraDetailScreen({super.key});
+   SuraDetailScreen({super.key});
+
+  @override
+  State<SuraDetailScreen> createState() => _SuraDetailScreenState();
+}
+
+class _SuraDetailScreenState extends State<SuraDetailScreen> {
+   List<String> verses=[];
 
   @override
   Widget build(BuildContext context) {
     var model =ModalRoute.of(context)?.settings.arguments as SuraModel;
+    if(verses.isEmpty){
+      loadSuraFile(model.suraIndex);
+    }
     return Scaffold(
       backgroundColor: AppColors.black,
     appBar:AppBar(
@@ -41,9 +52,11 @@ class SuraDetailScreen extends StatelessWidget {
                 SizedBox(height: 40,),
                 Expanded(
                   child: ListView.builder(
+                    itemCount: verses.length,
                     itemBuilder: (context, index) =>
                         Center(
-                          child: Text("data",
+                          child: Text(verses[index],
+                            textAlign: TextAlign.center,
                             style: Styles.style1 ,
                           ),
                         ),
@@ -56,5 +69,16 @@ class SuraDetailScreen extends StatelessWidget {
         ],),
       ),
     );
+  }
+
+ Future<void> loadSuraFile (int index) async
+  {
+    String suraFile =await rootBundle.loadString(
+        "assets/files/$index.txt");
+    List<String>suraLines=suraFile.split("\n");
+    verses=suraLines;
+    setState(() {
+
+    });
   }
 }
