@@ -1,10 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:islami/core/cache_helper.dart';
 import 'package:islami/firebase_options.dart';
 import 'package:islami/screens/sura_Details/sura_Detail_Screen.dart';
 import 'introduction_screen.dart';
 import 'screens/Home/Home_Screen.dart';
 void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await CacheHelper.init();
   runApp(const MyApp());
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -19,7 +22,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
   return MaterialApp(
     debugShowCheckedModeBanner: false,
-    initialRoute: IntroScreen.routeName,
+    initialRoute: CacheHelper.getBool("introduction")==false?
+    IntroScreen.routeName
+    :HomeScreen.routeName,
     routes: {
       IntroScreen.routeName:(context)=>IntroScreen(),
       HomeScreen.routeName:(context)=>HomeScreen(),

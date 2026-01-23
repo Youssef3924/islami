@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:islami/core/cache_helper.dart';
 import 'package:islami/screens/Home/Home_Screen.dart';
 import 'package:islami/core/colors.dart';
 import 'package:islami/core/styles.dart';
@@ -81,10 +82,12 @@ var listPagesViewModel=[
       showDoneButton:true ,
       showBackButton: true,
       back: Icon(Icons.arrow_back_ios,color:AppColors.primary ,),
-      onSkip: (){
+      onSkip: ()async{
+        await CacheHelper.saveBool(true);
         Navigator.pushNamed(context, HomeScreen.routeName);
       },
-      onDone: () {
+      onDone: () async{
+        await CacheHelper.saveBool(true);
         Navigator.pushNamed(context, HomeScreen.routeName);
       },
     );
