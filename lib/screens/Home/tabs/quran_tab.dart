@@ -16,6 +16,13 @@ class Quran extends StatefulWidget {
 }
 
 class _QuranState extends State<Quran> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    createSurasList();
+  }
+
    List<String> arabicAuranSuras = [
      "الفاتحه",
      "البقرة",
@@ -364,7 +371,30 @@ class _QuranState extends State<Quran> {
      '5',
      '6'
    ];
-
+   List<SuraModel>allSuras=[];
+   List<SuraModel>filteredAllSuras=[];
+   void createSurasList(){
+     for(int i=0;i<arabicAuranSuras.length;i++){
+       allSuras.add(SuraModel(name: arabicAuranSuras[i]
+           , nameEN: englishQuranSuras[i],
+           versesCount: AyaNumber[i],
+           suraIndex: i+1));
+     }
+     filteredAllSuras=allSuras;
+   }
+   TextEditingController searchController=TextEditingController();
+   void filterSuras(String query){
+     if(query.isEmpty){
+       filteredAllSuras=allSuras;
+     }else{
+       filteredAllSuras=allSuras.where((model) {
+         return model.name.contains(query)
+             ||model.nameEN.toLowerCase().contains(query.toLowerCase());
+       },).toList();
+     }
+     setState(() {
+     });
+   }
   @override
   Widget build(BuildContext context) {
     List<int> displayMostRecent=CacheHelper.getList("items");
@@ -381,6 +411,10 @@ class _QuranState extends State<Quran> {
           children: [
             SizedBox(height: 192,),
           TextField(
+            onChanged: (value) {
+              filterSuras(value);
+            },
+            controller: searchController,
             cursorColor: AppColors.primary,
             style: TextStyle(
               fontSize: 16,
@@ -430,10 +464,7 @@ class _QuranState extends State<Quran> {
                     ) ,
                     itemCount: displayMostRecent.length,
                     itemBuilder: (context,index){
-                      return RecentlyItem(model: SuraModel(name:  arabicAuranSuras[displayMostRecent[index]],
-                          nameEN: englishQuranSuras[displayMostRecent[index]],
-                          versesCount: AyaNumber[displayMostRecent[index]],
-                          suraIndex: displayMostRecent[index]+1),);
+                      return RecentlyItem(model: allSuras[index],);
                     }),
               ),
               SizedBox(height: 10,),
@@ -458,24 +489,15 @@ class _QuranState extends State<Quran> {
                   itemBuilder:(context,index){
                 return InkWell(
                   onTap: ()async{
-
                     await CacheHelper.saveList(index);
                     setState(() {
-
                     });
                     Navigator.pushNamed(context, SuraDetailScreen.routeName,
-                      arguments: SuraModel(name:  arabicAuranSuras[index],
-                          nameEN: englishQuranSuras[index],
-                          versesCount: AyaNumber[index],
-                          suraIndex: index+1)
-
+                      arguments: allSuras[index]
                     );
                   },
-                  child: SuraItem(model: SuraModel(name:  arabicAuranSuras[index],
-                      nameEN: englishQuranSuras[index],
-                      versesCount: AyaNumber[index],
-                      suraIndex: index+1),),
-                );
+                  child: SuraItem(model: filteredAllSuras[index]
+                ));
               }),
             )
           ],),
