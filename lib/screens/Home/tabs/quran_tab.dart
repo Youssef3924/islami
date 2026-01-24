@@ -8,8 +8,14 @@ import 'package:islami/screens/Home/widgets/recently_item.dart';
 import 'package:islami/screens/Home/widgets/sura_item.dart';
 import 'package:islami/screens/sura_Details/sura_Detail_Screen.dart';
 
-class Quran extends StatelessWidget {
+class Quran extends StatefulWidget {
    Quran({super.key});
+
+  @override
+  State<Quran> createState() => _QuranState();
+}
+
+class _QuranState extends State<Quran> {
    List<String> arabicAuranSuras = [
      "الفاتحه",
      "البقرة",
@@ -358,6 +364,7 @@ class Quran extends StatelessWidget {
      '5',
      '6'
    ];
+
   @override
   Widget build(BuildContext context) {
     List<int> displayMostRecent=CacheHelper.getList("items");
@@ -451,7 +458,11 @@ class Quran extends StatelessWidget {
                   itemBuilder:(context,index){
                 return InkWell(
                   onTap: ()async{
+
                     await CacheHelper.saveList(index);
+                    setState(() {
+
+                    });
                     Navigator.pushNamed(context, SuraDetailScreen.routeName,
                       arguments: SuraModel(name:  arabicAuranSuras[index],
                           nameEN: englishQuranSuras[index],
