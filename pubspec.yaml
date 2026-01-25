@@ -38,6 +38,7 @@ dependencies:
   introduction_screen: ^4.0.0
   firebase_core: ^4.3.0
   shared_preferences: ^2.5.4
+  carousel_slider: ^5.1.1
 
 dev_dependencies:
   flutter_test:
@@ -58,6 +59,7 @@ flutter:
   assets:
     - assets/images/
     - assets/files/
+    - assets/files2/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
