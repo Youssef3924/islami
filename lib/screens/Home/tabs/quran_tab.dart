@@ -1,13 +1,28 @@
 
 import 'package:flutter/material.dart';
+import 'package:islami/core/cache_helper.dart';
 import 'package:islami/core/colors.dart';
 import 'package:islami/core/styles.dart';
 import 'package:islami/models/sura_model.dart';
 import 'package:islami/screens/Home/widgets/recently_item.dart';
 import 'package:islami/screens/Home/widgets/sura_item.dart';
+import 'package:islami/screens/sura_Details/sura_Detail_Screen.dart';
 
-class Quran extends StatelessWidget {
+class Quran extends StatefulWidget {
    Quran({super.key});
+
+  @override
+  State<Quran> createState() => _QuranState();
+}
+
+class _QuranState extends State<Quran> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    createSurasList();
+  }
+
    List<String> arabicAuranSuras = [
      "الفاتحه",
      "البقرة",
@@ -356,8 +371,33 @@ class Quran extends StatelessWidget {
      '5',
      '6'
    ];
+   List<SuraModel>allSuras=[];
+   List<SuraModel>filteredAllSuras=[];
+   void createSurasList(){
+     for(int i=0;i<arabicAuranSuras.length;i++){
+       allSuras.add(SuraModel(name: arabicAuranSuras[i]
+           , nameEN: englishQuranSuras[i],
+           versesCount: AyaNumber[i],
+           suraIndex: i+1));
+     }
+     filteredAllSuras=allSuras;
+   }
+   TextEditingController searchController=TextEditingController();
+   void filterSuras(String query){
+     if(query.isEmpty){
+       filteredAllSuras=allSuras;
+     }else{
+       filteredAllSuras=allSuras.where((model) {
+         return model.name.contains(query)
+             ||model.nameEN.toLowerCase().contains(query.toLowerCase());
+       },).toList();
+     }
+     setState(() {
+     });
+   }
   @override
   Widget build(BuildContext context) {
+    List<int> displayMostRecent=CacheHelper.getList("items");
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -371,6 +411,10 @@ class Quran extends StatelessWidget {
           children: [
             SizedBox(height: 192,),
           TextField(
+            onChanged: (value) {
+              filterSuras(value);
+            },
+            controller: searchController,
             cursorColor: AppColors.primary,
             style: TextStyle(
               fontSize: 16,
@@ -402,30 +446,29 @@ class Quran extends StatelessWidget {
             ),
           ),
             SizedBox(height: 20,),
-            Text("Most Recently",style:
+            if(displayMostRecent.isNotEmpty)...[
+              Text("Most Recently",style:
               TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-                fontWeight: FontWeight.bold
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold
               )
               ),
-            SizedBox(height: 10,),
-            SizedBox(
-              height: 155,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                separatorBuilder:(context,index)=>SizedBox(
-                  width: 12,
-                ) ,
-                  itemCount: 10,
-                  itemBuilder: (context,index){
-                return RecentlyItem(model: SuraModel(name:  arabicAuranSuras[index],
-                    nameEN: englishQuranSuras[index],
-                    versesCount: AyaNumber[index],
-                    suraIndex: index+1),);
-              }),
-            ),
-            SizedBox(height: 10,),
+              SizedBox(height: 10,),
+              SizedBox(
+                height: 155,
+                child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    separatorBuilder:(context,index)=>SizedBox(
+                      width: 12,
+                    ) ,
+                    itemCount: displayMostRecent.length,
+                    itemBuilder: (context,index){
+                      return RecentlyItem(model: allSuras[index],);
+                    }),
+              ),
+              SizedBox(height: 10,),
+            ],
             Text("Suras List",style:
             TextStyle(
                 fontSize: 16,
@@ -444,10 +487,17 @@ class Quran extends StatelessWidget {
                   ),
                   itemCount: arabicAuranSuras.length,
                   itemBuilder:(context,index){
-                return SuraItem(model: SuraModel(name:  arabicAuranSuras[index],
-                    nameEN: englishQuranSuras[index],
-                    versesCount: AyaNumber[index],
-                    suraIndex: index+1),);
+                return InkWell(
+                  onTap: ()async{
+                    await CacheHelper.saveList(index);
+                    setState(() {
+                    });
+                    Navigator.pushNamed(context, SuraDetailScreen.routeName,
+                      arguments: allSuras[index]
+                    );
+                  },
+                  child: SuraItem(model: filteredAllSuras[index]
+                ));
               }),
             )
           ],),
