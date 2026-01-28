@@ -11,6 +11,13 @@ class Radios extends StatelessWidget {
               fit: BoxFit.fill,
               image: AssetImage("assets/images/radio_pg.png"))
       ),
+      child: Column(children: [
+        Container(
+          child: Row(children: [
+
+          ],),
+        )
+      ],),
     );
   }
 }
